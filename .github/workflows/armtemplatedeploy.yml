@@ -1,4 +1,3 @@
-
 name: armTemplateDeployment
 
 on:
@@ -20,7 +19,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy Resouce Group rg-githubactions with AZ CLI
-        uses: Azure/cli@1.0.4
+        uses: Azure/cli
         with:
           inlinescript: |
             az deployment sub create --location "East US" --template-file ./arm-templates/resourcegroup.json
