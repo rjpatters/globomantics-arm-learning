@@ -19,7 +19,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy Resouce Group rg-githubactions with AZ CLI
-        uses: Azure/cli@1
+        uses: Azure/cli@1.0.4
         with:
+          azcliversion: 2.3.0
           inlinescript: |
             az deployment sub create --location "East US" --template-file ./arm-templates/resourcegroup.json
