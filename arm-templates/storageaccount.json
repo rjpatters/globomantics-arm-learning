@@ -40,9 +40,9 @@
         }
     ],
     "outputs": {
-        "output1": {
+        "BlogUri": {
             "type": "string",
             "value": "[reference(resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))).primaryendpoint.blob]"
         }
     }
-}
+}   
