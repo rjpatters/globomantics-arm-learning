@@ -11,7 +11,7 @@
         "location": {
             "type": "string",
             "metadata": {
-                "description": "Enter locationto deploy account to"
+                "description": "Enter location to deploy the account to"
             }
         },
         "sku": {
@@ -25,16 +25,16 @@
     "variables": {},
     "resources": [
         {
-            "name": "[parameters]('storageAccountName')",
+            "name": "[parameters('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-04-01",
             "tags": {
                 "displayName": "storageaccount1"
             },
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "StorageV2",
             "sku": {
-                "name": "Premium_LRS",
+                "name": "[parameters('sku')]",
                 "tier": "Premium"
             }
         }
