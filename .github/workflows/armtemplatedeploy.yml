@@ -6,6 +6,11 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  resource_group_name: rg-githubactions
+  location: "US East"
+  subscriptionID: 8ac7758a-404d-426b-b42c-a455d37238a0
+
 jobs:
   armDeploy:
     runs-on: ubuntu-latest
@@ -18,22 +23,22 @@ jobs:
         with: 
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy Resource Group rg-githubactions
+      - name: Deploy Resource Group ${{ env.resource_group_name }}
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          subscriptionId: 8ac7758a-404d-426b-b42c-a455d37238a0
-          region: East US
+          subscriptionId: ${{ env.subscriptionID }}
+          region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
-          deploymentname: rg-githubactions
+          deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
         uses: Azure/arm-deploy@v1
         id: storageAccountDeploy
         with:
           scope: resourcegroup
-          resourceGroupName: rg-githubactions
-          subscriptionId: 8ac7758a-404d-426b-b42c-a455d37238a0
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
           deploymentMode: incremental
@@ -42,11 +47,12 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          resourceGroupName: rg-githubactions
-          subscriptionId: 8ac7758a-404d-426b-b42c-a455d37238a0
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
