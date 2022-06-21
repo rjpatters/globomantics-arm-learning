@@ -8,7 +8,7 @@ on:
 
 env:
   resource_group_name: rg-githubactions
-  location: "East US"
+  location: East US
   subscriptionID: 8ac7758a-404d-426b-b42c-a455d37238a0
 
 jobs:
