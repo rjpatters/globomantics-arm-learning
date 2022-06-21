@@ -109,4 +109,5 @@ jobs:
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
             location="${{ env.location }}"
           deploymentMode: incremental
+          
       - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
