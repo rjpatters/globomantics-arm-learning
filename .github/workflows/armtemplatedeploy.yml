@@ -7,13 +7,17 @@ on:
   workflow_dispatch:
 
 env:
-  resource_group_name: rg-githubactions
-  location: East US
   subscriptionID: 8ac7758a-404d-426b-b42c-a455d37238a0
 
 jobs:
-  armDeploy:
+  armDeployStaging:
+    name: Deploy to Staging
     runs-on: ubuntu-latest
+    env:
+      resource_group_name: rg-stg-githubactions
+      location: East US
+    environment:
+      name: Staging
 
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +44,7 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.json
+          parameters: ./arm-templates/storageaccount.parameters.stg.json
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
@@ -55,4 +59,54 @@ jobs:
             location="${{ env.location }}"
           deploymentMode: incremental
 
+  armDeployProduction:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    env:
+      resource_group_name: rg-prod-githubactions
+      location: Central US
+    environment:
+      name: Production
+
+    needs: armDeployStaging
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with: 
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Resource Group ${{ env.resource_group_name }}
+        uses: Azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionID }}
+          region: "${{ env.location }}"
+          template: ./arm-templates/resourcegroup.json
+          deploymentname: ${{ env.resource_group_name }}
+
+      - name: Deploy Storage Account
+        uses: Azure/arm-deploy@v1
+        id: storageAccountDeploy
+        with:
+          scope: resourcegroup
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionID }}
+          template: ./arm-templates/storageaccount.json
+          parameters: ./arm-templates/storageaccount.parameters.prod.json
+          deploymentMode: incremental
+
+      - name: Deploy Virtual machine
+        uses: Azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          resourceGroupName: ${{ env.resource_group_name }}
+          subscriptionId: ${{ env.subscriptionID }}
+          template: ./arm-templates/virtualmachine.json
+          parameters: 
+            adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
+            location="${{ env.location }}"
+          deploymentMode: incremental
       - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
