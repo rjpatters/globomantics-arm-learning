@@ -34,6 +34,10 @@ jobs:
           subscriptionId: ${{ env.subscriptionID }}
           region: "${{ env.location }}"
           template: ./arm-templates/resourcegroup.json
+          parameters:
+            location:"${{ env.location }}"
+            resourceGroupName:${{ env.resource_group_name }}
+
           deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
@@ -85,6 +89,9 @@ jobs:
           subscriptionId: ${{ env.subscriptionID }}
           region: "${{ env.location }}"
           template: ./arm-templates/resourcegroup.json
+          parameters:
+            location:"${{ env.location }}"
+            resourceGroupName:${{ env.resource_group_name }}
           deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
@@ -109,5 +116,5 @@ jobs:
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
             location="${{ env.location }}"
           deploymentMode: incremental
-          
+
       - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
