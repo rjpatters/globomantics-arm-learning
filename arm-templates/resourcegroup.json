@@ -6,15 +6,13 @@
             "type": "string",
             "metadata": {
                 "description": "Enter the locaiton to deploy the resource to"
-            },
-            "defaultValue": "East US"
+            }
         },
         "resourceGroupName": {
             "type": "string",
             "metadata": {
                 "description": "Enter the name for the resource group"
-            },
-            "defaultValue": "rg-githubactions"
+            }
         }
     },
     "functions": [],
