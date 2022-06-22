@@ -37,7 +37,6 @@ jobs:
           parameters:
             location:"${{ env.location }}"
             resourceGroupName:${{ env.resource_group_name }}
-
           deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
@@ -95,7 +94,6 @@ jobs:
           parameters:
             location:${{ env.location }}
             resourceGroupName:${{ env.resource_group_name }}
-
           deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
