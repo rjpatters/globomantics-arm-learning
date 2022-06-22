@@ -48,7 +48,10 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.stg.json
+          parameters: 
+            sku=Standard_LRS
+            storageAccountName=rjp_globostg002
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
@@ -72,6 +75,8 @@ jobs:
     environment:
       name: PRODUCTION
 
+    needs: armDeployStaging
+    
     steps:
       - uses: actions/checkout@v2
 
@@ -101,7 +106,10 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.prd.json
+          parameters: 
+            sku=Standard_LRS
+            storageAccountName=rjp_globoprd002
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
