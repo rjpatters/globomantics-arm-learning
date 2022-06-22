@@ -35,7 +35,7 @@ jobs:
           region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
           parameters:
-            location:${{ env.location }}
+            location:"${{ env.location }}"
             resourceGroupName:${{ env.resource_group_name }}
           deploymentname: ${{ env.resource_group_name }}
 
@@ -50,7 +50,7 @@ jobs:
           parameters: 
             sku=Standard_LRS
             storageAccountName=rjp_globostg002
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
@@ -62,7 +62,7 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
   armDeployProduction:
@@ -92,7 +92,7 @@ jobs:
           region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
           parameters:
-            location:${{ env.location }}
+            location:"${{ env.location }}"
             resourceGroupName:${{ env.resource_group_name }}
           deploymentname: ${{ env.resource_group_name }}
 
@@ -107,7 +107,7 @@ jobs:
           parameters: 
             sku=Standard_LRS
             storageAccountName=rjp_globoprd002
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
@@ -119,7 +119,7 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.UBUNTU_ADMIN_PASSWORD }}
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}
