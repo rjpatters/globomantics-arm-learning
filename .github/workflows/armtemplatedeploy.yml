@@ -17,7 +17,7 @@ jobs:
       resource_group_name: rg-stg-githubactions
       location: East US
     environment:
-      name: Staging
+      name: staging
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
         with:
           scope: subscription
           subscriptionId: ${{ env.subscriptionID }}
-          region: "${{ env.location }}"
+          region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
           parameters:
             location:"${{ env.location }}"
@@ -70,9 +70,7 @@ jobs:
       resource_group_name: rg-prod-githubactions
       location: Central US
     environment:
-      name: Production
-
-    needs: armDeployStaging
+      name: PRODUCTION
 
     steps:
       - uses: actions/checkout@v2
@@ -87,11 +85,12 @@ jobs:
         with:
           scope: subscription
           subscriptionId: ${{ env.subscriptionID }}
-          region: "${{ env.location }}"
+          region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
           parameters:
             location:"${{ env.location }}"
             resourceGroupName:${{ env.resource_group_name }}
+
           deploymentname: ${{ env.resource_group_name }}
 
       - name: Deploy Storage Account
@@ -102,7 +101,7 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionID }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.prod.json
+          parameters: ./arm-templates/storageaccount.parameters.prd.json
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
