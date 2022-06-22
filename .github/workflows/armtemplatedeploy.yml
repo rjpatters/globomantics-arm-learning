@@ -88,7 +88,7 @@ jobs:
           region: ${{ env.location }}
           template: ./arm-templates/resourcegroup.json
           parameters:
-            location:"${{ env.location }}"
+            location:${{ env.location }}
             resourceGroupName:${{ env.resource_group_name }}
 
           deploymentname: ${{ env.resource_group_name }}
