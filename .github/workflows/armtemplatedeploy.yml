@@ -50,7 +50,7 @@ jobs:
           parameters: 
             sku=Standard_LRS
             storageAccountName=rjp_globostg002
-            location=${{ env.location }}
+            location="${{ env.location }}"
           deploymentMode: incremental
 
       - name: Deploy Virtual machine
